@@ -1,0 +1,14 @@
+{
+  "name": "github.com-client_chat_application",
+  "version": "1.0.0",
+  "description": "client for the chat application in go ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "karimNafiz",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^8.18.3"
+  }
+}
