@@ -1,27 +1,36 @@
 import WebSocket from "ws";
+import {once} from "./utils"
+import {GetWebSocketPayload} from "./encode"
+import {OnMessageArrive} from "./decode"
+
+
 
 const ws = new WebSocket("wss://localhost:4000/v1/chat/connect");
 ws.binaryType = "arraybuffer";
 
+async function main(){
 
-// promise helper for timeouts
-// emitter is the object that will be emitting the events
-// type is the name of the event, usually string
-const once = (emitter , type, ms=8000) => new Promise((res , rej)=>{
-    const t = setTimeout(()=>{
-        // if the timeout is successful
-        // then no connection was not established 
-        // we need to remove the event of type -> type
-        emitter.removeEventListener(type , on)
-        // reject the promise 
-        rej(new Error("timeout")) // didnt know javascript had Error
-    }, ms);
-    function on(ev){
-        clearTimeout(t);
-        emitter.removeEventListener(type , on);
-        res(ev);
+// try once to establish the connection 
+
+    try{
+        await once(ws , "open") // await the connection starting
+        // once the connection is established
+    }catch(err){
+        console.debug("web socket connection failed")
     }
 
-    emitter.addEventListener(type, on)
+    const message_resolved = (payloadJSON)=>{
+        console.debug("payload -> ",payloadJSON)
+    }
+    const message_rejected = (err)=>{
+        console.debug("err", err.message)
+    }
+    ws.addEventListener("onmessage", OnMessageArrive(message_resolved , message_rejected))
 
-})
+
+
+
+
+}
+
+await main()
